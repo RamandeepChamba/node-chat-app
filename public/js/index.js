@@ -6,11 +6,6 @@ socket.on('connect', function () {
 	socket.on('newMessage', function (message) {
 		console.log('newMessage', message);
 	});
-
-	socket.emit('createMessage', {
-		to: 'vishal@example.com',
-		text: 'Hey! how you doing'
-	});
 });
 
 socket.on('disconnect', function () {
