@@ -10,6 +10,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIO(server);
 
+app.use(express.static(publicPath));
+
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
@@ -19,20 +21,19 @@ io.on('connection', (socket) => {
 
 	socket.on('createMessage', (message, callback) => {
 		console.log('createMessage', message);
-		callback('This is from server');
 		io.emit('newMessage', generateMessage(message.from, message.text));
+		callback();
 	});
 
-	socket.on('createLocationMessage', (coords) => {
+	socket.on('createLocationMessage', (coords, callback) => {
 		io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+		callback();
 	});
 
 	socket.on('disconnect', () => {
 		console.log('User disconnected');
 	});
 });
-
-app.use(express.static(publicPath));
 
 server.listen(port, () => {
 	console.log(`server is up on port ${port}`);
